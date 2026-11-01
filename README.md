@@ -1,6 +1,6 @@
 # 🚀Quarkus with MicroProfile, plain JDBC and Data-Oriented Programming on BCE
 
-Data-Oriented Programming with plain JDBC on Quarkus/MicroProfile: records are the row shapes, sealed interfaces the variants, SQL hand-written in text blocks, no ORM. Example domain: a JDK release with all its JEPs, persisted inside one BCE business component. Minimal dependencies, system tests in a standalone module.
+Data-Oriented Programming with plain JDBC on Quarkus/MicroProfile, PostgreSQL as the store: records are the row shapes, sealed interfaces the variants, SQL hand-written in text blocks, no ORM. Example domain: a JDK release with all its JEPs, persisted inside one BCE business component. Minimal dependencies, system tests in a standalone module.
 
 What the system is for, who uses it and how it is carved is recorded in the [system brief](system-brief.md): one business capability, `releases`, where a developer finds a JDK version and every JEP it shipped from a read-only example set that ships with the system.
 
