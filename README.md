@@ -1,6 +1,8 @@
-# 🚀Quarkus with MicroProfile on BCE
+# 🚀Quarkus with MicroProfile, plain JDBC and Data-Oriented Programming on BCE
 
-Quarkus MicroProfile template with BCE architecture pattern. Features boundary-control-entity separation, System Tests in a standalone module, REST endpoints with JAX-RS, CDI for dependency injection, and MicroProfile-only dependencies. A starting point for Quarkus projects with minimal dependencies.
+Data-Oriented Programming with plain JDBC on Quarkus/MicroProfile: records are the row shapes, sealed interfaces the variants, SQL hand-written in text blocks, no ORM. Example domain: a JDK release with all its JEPs, persisted inside one BCE business component. Minimal dependencies, system tests in a standalone module.
+
+What the system is for, who uses it and how it is carved is recorded in the [system brief](system-brief.md): one business capability, `releases`, where a developer finds a JDK version and every JEP it shipped from a read-only example set that ships with the system.
 
 BCE-structured 👉 [bce.design](https://bce.design) | AI-assisted with 👉 [airails.dev](https://airails.dev)
 
@@ -18,9 +20,9 @@ See [AGENTS.md](AGENTS.md#build--test) for build, dev mode, and system test inst
 Spec-driven BCE 👉 [sbce.space](https://sbce.space): one capability spec ≡ one business component. The spec lives in the BC's `package-info.java` and is the boundary contract; a green test run is the only definition of done. The `/sbce` skill and its companions are installed from 👉 [airails.dev](https://airails.dev).
 
 ```
-/sbce new "let a customer check out a cart"         # intent-level (PM/BA or dev): proposes the BC carving, confirm first
-/sbce new checkout                                  # structure-level (dev): the BC is already decided — authors the spec, scaffolds boundary/control/entity
-/sbce apply checkout                                # converge: close the spec-vs-code gap until the test loop is green
+/capability-brief "releases — new — a developer finds a JDK version and every JEP it shipped"   # from the system brief: the capability interview, input to /sbce new
+/sbce new                                           # reads the brief: authors the spec, scaffolds boundary/control/entity
+/sbce apply releases                                # converge: close the spec-vs-code gap until the test loop is green
 ```
 
 - `new` writes the spec (boundary ops + [EARS](https://alistairmavin.com/ears/) requirements) — no business code yet.
