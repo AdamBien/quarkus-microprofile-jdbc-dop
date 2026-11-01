@@ -72,7 +72,7 @@ class VersionsTest {
         this.versions.save(JDK_98);
         assertThatThrownBy(() -> this.versions.save(JDK_98))
                 .isInstanceOf(ClientErrorException.class)
-                .hasMessageContaining("pk_jdk_version")
+                .hasMessage("duplicate: pk_jdk_version")
                 .extracting(e -> ((ClientErrorException) e).getResponse().getStatus())
                 .isEqualTo(CONFLICT);
     }
