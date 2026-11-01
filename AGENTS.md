@@ -15,6 +15,8 @@ Follows the [BCE pattern](https://bce.design).
 
 ## Build & Test
 
+Dev mode and the tests start a PostgreSQL container through Quarkus Dev Services; Docker must be running. In production the datasource comes from `QUARKUS_DATASOURCE_JDBC_URL`, `QUARKUS_DATASOURCE_USERNAME` and `QUARKUS_DATASOURCE_PASSWORD`. Flyway applies each business component's DDL from `service/src/main/resources/db/migration` at startup.
+
 ### Development Mode
 
 ```bash
