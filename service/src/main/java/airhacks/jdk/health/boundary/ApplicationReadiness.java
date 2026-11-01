@@ -1,4 +1,4 @@
-package airhacks.qmp.health.boundary;
+package airhacks.jdk.health.boundary;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import org.eclipse.microprofile.health.HealthCheck;

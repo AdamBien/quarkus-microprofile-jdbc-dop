@@ -1,4 +1,4 @@
-package airhacks.qmp.health.boundary;
+package airhacks.jdk.health.boundary;
 
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;

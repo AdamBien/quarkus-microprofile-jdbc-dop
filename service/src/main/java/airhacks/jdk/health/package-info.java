@@ -4,4 +4,4 @@
  * BC-specific health checks live in the respective BC's boundary package,
  * close to the code whose operational invariants they assert.
  */
-package airhacks.qmp.health;
+package airhacks.jdk.health;
