@@ -141,16 +141,12 @@ public class Versions {
         while (rows.next()) {
             var jeps = jepsByVersion.computeIfAbsent(rows.getInt("feature_number"), _ -> new ArrayList<>());
             if (rows.getObject("jep_number", Integer.class) != null) {
-                jeps.add(toJep(rows));
+                jeps.add(Jep.fromResultSet(rows));
             }
         }
         return jepsByVersion.entrySet().stream()
                 .map(Versions::toVersion)
                 .toList();
-    }
-
-    static Jep toJep(ResultSet rows) throws SQLException {
-        return new Jep(rows.getInt("jep_number"), rows.getString("title"));
     }
 
     static JdkVersion toVersion(Map.Entry<Integer, List<Jep>> versionWithJeps) {
