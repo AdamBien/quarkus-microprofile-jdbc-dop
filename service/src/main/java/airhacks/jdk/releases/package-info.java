@@ -38,6 +38,7 @@
 /// - D8 — An unreachable store is reported as temporarily unavailable. _(rejected: answering not found)_
 /// - D9 — Listing the known versions is part of the capability. _(rejected: lookup by version only; finding a JEP by number)_
 /// - D10 — Before any load, listing versions answers with an empty list. _(rejected: a notice that nothing is loaded yet)_
+/// - D11 — The example set is its own top-level resource, loaded with POST and no body; the versions resource stays read-only. _(why: the set is the server's data, the client sends no representation; rejected: a sub-resource of versions; PUT)_
 ///
 /// ## Out of scope
 /// - finding one JEP by its number across versions — the version is the unit of lookup

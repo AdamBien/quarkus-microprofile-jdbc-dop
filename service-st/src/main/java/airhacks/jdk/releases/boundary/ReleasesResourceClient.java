@@ -1,7 +1,6 @@
 package airhacks.jdk.releases.boundary;
 
 import jakarta.ws.rs.GET;
-import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
@@ -13,10 +12,6 @@ import org.eclipse.microprofile.rest.client.inject.RegisterRestClient;
 @Produces(MediaType.APPLICATION_JSON)
 @RegisterRestClient(configKey = "base_uri")
 public interface ReleasesResourceClient {
-
-    @POST
-    @Path("/examples")
-    Response loadExamples();
 
     @GET
     Response listVersions();

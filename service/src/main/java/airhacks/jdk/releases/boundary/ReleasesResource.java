@@ -1,31 +1,23 @@
 package airhacks.jdk.releases.boundary;
 
-import static airhacks.jdk.releases.Requirement.Rn.R1_1;
-import static airhacks.jdk.releases.Requirement.Rn.R1_2;
-import static airhacks.jdk.releases.Requirement.Rn.R1_3;
 import static airhacks.jdk.releases.Requirement.Rn.R2_1;
 import static airhacks.jdk.releases.Requirement.Rn.R2_2;
 import static airhacks.jdk.releases.Requirement.Rn.R3_1;
 import static airhacks.jdk.releases.Requirement.Rn.R3_2;
 import static airhacks.jdk.releases.Requirement.Rn.R3_3;
 
-import java.util.List;
 import java.util.OptionalInt;
 import airhacks.jdk.releases.Requirement;
-import airhacks.jdk.releases.control.ExampleSet;
 import airhacks.jdk.releases.control.Problems;
 import airhacks.jdk.releases.control.Versions;
 import airhacks.jdk.releases.entity.JdkVersion;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import jakarta.json.Json;
-import jakarta.json.JsonObject;
 import jakarta.json.stream.JsonCollectors;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.NotFoundException;
-import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
@@ -33,32 +25,14 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 
-/// Boundary of `releases`: `load-examples`, `list-versions`, `find-version`.
+/// Read-only boundary of `releases`: `list-versions`, `find-version`.
 @Path("versions")
 @Produces(MediaType.APPLICATION_JSON)
 @ApplicationScoped
 public class ReleasesResource {
 
-    static final String LOADED = "loaded";
-    static final String ALREADY_LOADED = "already-loaded";
-
     @Inject
     Versions versions;
-
-    @Inject
-    ExampleSet exampleSet;
-
-    @POST
-    @Path("examples")
-    @Transactional
-    @Requirement({R1_1, R1_2, R1_3})
-    public Response loadExamples() {
-        if (this.exampleSet.isLoaded()) {
-            return Response.ok(report(ALREADY_LOADED, ExampleSet.SHIPPED_VERSIONS)).build();
-        }
-        var loaded = this.exampleSet.load();
-        return Response.status(Status.CREATED).entity(report(LOADED, loaded)).build();
-    }
 
     @GET
     @Transactional
@@ -108,15 +82,5 @@ public class ReleasesResource {
     static NotFoundException notFound(int featureNumber) {
         var message = "JDK version %d is not found".formatted(featureNumber);
         return new NotFoundException(message, Problems.problem(Status.NOT_FOUND, message));
-    }
-
-    static JsonObject report(String outcome, List<Integer> versions) {
-        var array = versions.stream()
-                .map(Json::createValue)
-                .collect(JsonCollectors.toJsonArray());
-        return Json.createObjectBuilder()
-                .add("outcome", outcome)
-                .add("versions", array)
-                .build();
     }
 }

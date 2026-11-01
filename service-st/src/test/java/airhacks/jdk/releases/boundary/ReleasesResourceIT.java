@@ -22,17 +22,21 @@ class ReleasesResourceIT {
 
     @Inject
     @RestClient
+    ExampleSetClient examples;
+
+    @Inject
+    @RestClient
     ReleasesResourceClient client;
 
     @Test
     @Order(1)
     @DisplayName("R1.1 R1.2 load-examples stores the shipped set once and reports 25 and 27")
     void loadExamplesIsIdempotent() {
-        try (var first = this.client.loadExamples()) {
+        try (var first = this.examples.loadExamples()) {
             assertThat(first.getStatus()).isIn(200, 201);
             assertThat(versions(first.readEntity(JsonObject.class))).containsExactly(25, 27);
         }
-        try (var second = this.client.loadExamples()) {
+        try (var second = this.examples.loadExamples()) {
             assertThat(second.getStatus()).isEqualTo(200);
             var report = second.readEntity(JsonObject.class);
             assertThat(report.getString("outcome")).isEqualTo("already-loaded");
