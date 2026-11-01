@@ -12,6 +12,8 @@ mvn clean package
 
 ## Run
 
+PostgreSQL is the store. Development mode and tests start it through Quarkus Dev Services (Docker required); production reads `QUARKUS_DATASOURCE_JDBC_URL`, `QUARKUS_DATASOURCE_USERNAME` and `QUARKUS_DATASOURCE_PASSWORD`. Flyway applies the DDL under `src/main/resources/db/migration` at startup.
+
 Development mode:
 
 ```bash
