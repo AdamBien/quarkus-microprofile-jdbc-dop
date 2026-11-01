@@ -61,4 +61,4 @@ Not part of the brief, not checked by its checklist.
 - Which JDK version is the example is still to be named. The build targets release 25, which is a hint, not an answer.
 - A JEP carries identity and title only, no body.
 - The system test against the running service is the acceptance evidence the stakeholders named.
-- Stack hints for `/sbce new`, not for the brief: MicroProfile server with JDBC persistence.
+- Stack hints for `/sbce new`, not for the brief: MicroProfile server with JDBC persistence; PostgreSQL is the store.
