@@ -7,14 +7,13 @@ import static airhacks.jdk.releases.Requirement.Rn.R3_2;
 import static airhacks.jdk.releases.Requirement.Rn.R3_3;
 
 import java.util.OptionalInt;
+import airhacks.jdk.Boundary;
 import airhacks.jdk.releases.Requirement;
 import airhacks.jdk.releases.control.Problems;
 import airhacks.jdk.releases.control.Versions;
 import airhacks.jdk.releases.entity.JdkVersion;
-import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.json.stream.JsonCollectors;
-import jakarta.transaction.Transactional;
 import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.NotFoundException;
@@ -28,14 +27,13 @@ import jakarta.ws.rs.core.Response.Status;
 /// Read-only boundary of `releases`: `list-versions`, `find-version`.
 @Path("versions")
 @Produces(MediaType.APPLICATION_JSON)
-@ApplicationScoped
+@Boundary
 public class ReleasesResource {
 
     @Inject
     Versions versions;
 
     @GET
-    @Transactional
     @Requirement({R2_1, R2_2})
     public Response listVersions() {
         var summaries = this.versions.findAll().stream()
@@ -46,7 +44,6 @@ public class ReleasesResource {
 
     @GET
     @Path("{featureNumber}")
-    @Transactional
     @Requirement({R3_1, R3_2, R3_3})
     public Response findVersion(@PathParam("featureNumber") String featureNumber) {
         var number = featureNumber(featureNumber);

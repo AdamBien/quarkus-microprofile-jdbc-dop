@@ -25,7 +25,7 @@ PostgreSQL is the store. Development mode and tests start it through Quarkus Dev
 
 ## Persistence
 
-Plain JDBC with Data-Oriented Programming. The records in `entity` are the row shapes and carry the invariants. The controls hold the SQL in text blocks, bind parameters with `?`, and map rows by column name through the canonical constructor. Boundary methods are `@Transactional`, inject the controls, and never see a `DataSource`; each control method takes its connection from the pool, which enlists it in the boundary's transaction. The DDL is the source of truth: a schema change starts in SQL and the record follows.
+Plain JDBC with Data-Oriented Programming. The records in `entity` are the row shapes and carry the invariants. The controls hold the SQL in text blocks, bind parameters with `?`, and map rows by column name through the canonical constructor. Resource classes carry the `@Boundary` stereotype from `airhacks.jdk`, which bundles `@ApplicationScoped` and `@Transactional`, so every boundary method runs in a container-managed transaction. Boundaries inject the controls and never see a `DataSource`; each control method takes its connection from the pool, which enlists it in the boundary's transaction. The DDL is the source of truth: a schema change starts in SQL and the record follows.
 
 A `SQLException` is translated once, in the control, into the JAX-RS exception the runtime answers. The boundary catches nothing and the module defines no `ExceptionMapper`. Every error body is `{"error": "<message>"}`.
 
