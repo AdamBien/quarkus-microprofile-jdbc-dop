@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.OptionalInt;
 import airhacks.jdk.releases.Requirement;
 import airhacks.jdk.releases.control.ExampleSet;
+import airhacks.jdk.releases.control.Problems;
 import airhacks.jdk.releases.control.Versions;
 import airhacks.jdk.releases.entity.JdkVersion;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -22,7 +23,6 @@ import jakarta.json.JsonObject;
 import jakarta.json.stream.JsonCollectors;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.BadRequestException;
-import jakarta.ws.rs.ClientErrorException;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.NotFoundException;
 import jakarta.ws.rs.POST;
@@ -56,12 +56,8 @@ public class ReleasesResource {
         if (this.exampleSet.isLoaded()) {
             return Response.ok(report(ALREADY_LOADED, ExampleSet.SHIPPED_VERSIONS)).build();
         }
-        try {
-            var loaded = this.exampleSet.load();
-            return Response.status(Status.CREATED).entity(report(LOADED, loaded)).build();
-        } catch (IllegalArgumentException e) {
-            throw new ClientErrorException(e.getMessage(), problem(Status.CONFLICT, e.getMessage()));
-        }
+        var loaded = this.exampleSet.load();
+        return Response.status(Status.CREATED).entity(report(LOADED, loaded)).build();
     }
 
     @GET
@@ -106,19 +102,12 @@ public class ReleasesResource {
     }
 
     static BadRequestException badRequest(String message) {
-        return new BadRequestException(message, problem(Status.BAD_REQUEST, message));
+        return new BadRequestException(message, Problems.problem(Status.BAD_REQUEST, message));
     }
 
     static NotFoundException notFound(int featureNumber) {
         var message = "JDK version %d is not found".formatted(featureNumber);
-        return new NotFoundException(message, problem(Status.NOT_FOUND, message));
-    }
-
-    static Response problem(Status status, String message) {
-        var body = Json.createObjectBuilder()
-                .add("error", message)
-                .build();
-        return Response.status(status).entity(body).type(MediaType.APPLICATION_JSON).build();
+        return new NotFoundException(message, Problems.problem(Status.NOT_FOUND, message));
     }
 
     static JsonObject report(String outcome, List<Integer> versions) {

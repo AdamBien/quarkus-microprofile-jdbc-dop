@@ -6,7 +6,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.sql.SQLException;
 import java.util.List;
-import java.util.function.Supplier;
+import org.assertj.core.api.ThrowableAssert.ThrowingCallable;
 import org.junit.jupiter.api.Test;
 import airhacks.jdk.releases.Requirement;
 
@@ -20,9 +20,15 @@ class StoreUnavailableTest {
         var versions = new Versions();
         versions.dataSource = new UnreachableDataSource();
         var exampleSet = new ExampleSet();
-        exampleSet.dataSource = new UnreachableDataSource();
+        exampleSet.versions = versions;
 
-        List<Supplier<Object>> operations = List.of(versions::findAll, () -> versions.find(25), exampleSet::isLoaded, exampleSet::load);
+        List<ThrowingCallable> operations = List.of(
+                versions::findAll,
+                () -> versions.find(25),
+                versions::featureNumbers,
+                () -> versions.save(ExampleSet.SHIPPED.getFirst()),
+                exampleSet::isLoaded,
+                exampleSet::load);
         assertThat(operations).allSatisfy(StoreUnavailableTest::failsAsUnavailable);
     }
 
@@ -32,7 +38,7 @@ class StoreUnavailableTest {
         assertThat(exception.getResponse().getStatus()).isEqualTo(SERVICE_UNAVAILABLE);
     }
 
-    static void failsAsUnavailable(Supplier<Object> operation) {
-        assertThatThrownBy(operation::get).isInstanceOf(StoreUnavailableException.class);
+    static void failsAsUnavailable(ThrowingCallable operation) {
+        assertThatThrownBy(operation).isInstanceOf(StoreUnavailableException.class);
     }
 }
